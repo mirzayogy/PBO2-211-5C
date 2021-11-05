@@ -5,7 +5,10 @@
  */
 package com.mirzayogy.pbo2.c.frame.admin;
 
+import com.mirzayogy.pbo2.c.model.JenisBarang;
+import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -36,7 +39,7 @@ public class JenisBarangViewFrame extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbView = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -44,6 +47,11 @@ public class JenisBarangViewFrame extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jLabel1.setText("Cari Jenis Barang");
 
@@ -52,18 +60,18 @@ public class JenisBarangViewFrame extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
         jLabel2.setText("Data Jenis Barang");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbView.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Id", "Nama Jenis Barang"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbView);
+        if (tbView.getColumnModel().getColumnCount() > 0) {
+            tbView.getColumnModel().getColumn(0).setMaxWidth(100);
+        }
 
         jButton2.setText("Tambah");
 
@@ -141,6 +149,24 @@ public class JenisBarangViewFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        JenisBarang jb = new JenisBarang();
+        ArrayList<JenisBarang> list = jb.read();
+        
+        DefaultTableModel model = (DefaultTableModel) tbView.getModel();
+        
+        Object[] row = new Object[2];
+        model.setRowCount(0);
+        
+        if(list.size()>0){
+            for (int i = 0; i < list.size(); i++) {
+                row[0] = list.get(i).getId();
+                row[1] = list.get(i).getNamaJenisBarang();
+                model.addRow(row);
+            }
+        }
+    }//GEN-LAST:event_formWindowActivated
+
     /**
      * @param args the command line arguments
      */
@@ -186,7 +212,7 @@ public class JenisBarangViewFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tbView;
     // End of variables declaration//GEN-END:variables
 }

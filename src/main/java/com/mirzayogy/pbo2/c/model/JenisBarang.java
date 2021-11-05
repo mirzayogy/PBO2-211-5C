@@ -84,7 +84,54 @@ public class JenisBarang {
             PreparedStatement ps = this.connection.prepareStatement(selectSQL);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-//                System.out.println(rs.getString(2));
+                JenisBarang jb = new JenisBarang();
+                jb.setId(rs.getInt("id"));
+                jb.setNamaJenisBarang(rs.getString("namajenisbarang"));
+                list.add(jb);
+            }
+            return list;
+        } catch (SQLException ex) {
+            
+        }
+        return null;
+    }
+    
+    public boolean find(){
+        String findSQL = "SELECT * FROM jenisbarang WHERE id = ?";
+        
+        this.database = new Database();
+        this.connection = database.getConnection();
+        
+        try {
+            PreparedStatement ps = this.connection.prepareStatement(findSQL);
+            ps.setInt(1, this.id);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                this.setNamaJenisBarang(rs.getString("namajenisbarang"));
+                return true;
+            }
+        } catch (SQLException ex) {
+            
+        }
+        return false;
+    }
+    
+    public ArrayList<JenisBarang> search(String keyword){
+        
+        keyword = "%" + keyword + "%";
+        
+        ArrayList<JenisBarang> list = new ArrayList<>();
+        String selectSQL = "SELECT * FROM jenisbarang WHERE namajenisbarang like ?";
+        
+        
+        this.database = new Database();
+        this.connection = database.getConnection();
+        
+        try {
+            PreparedStatement ps = this.connection.prepareStatement(selectSQL);
+            ps.setString(1, keyword);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
                 JenisBarang jb = new JenisBarang();
                 jb.setId(rs.getInt("id"));
                 jb.setNamaJenisBarang(rs.getString("namajenisbarang"));
